@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Post, Group, User, Comment, Follow
+from .models import Post, Group, User, Follow
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
@@ -21,7 +21,7 @@ def index(request):
     posts = Post.objects.select_related('author', 'group')
     context = {
         'page_obj': get_page_obj(posts, request)
-    } 
+    }
     return render(request, template, context)
 
 
@@ -44,7 +44,7 @@ def profile(request, username):
             request.user.is_authenticated
             and request.user != author
             and request.user.follower.filter(author=author).exists()
-    )
+            )
     context = {
         'author': author,
         'page_obj': get_page_obj(posts, request),

@@ -32,4 +32,3 @@ def server_error(request):
         "core/500.html",
         status=HTTPStatus.INTERNAL_SERVER_ERROR
     )
-    

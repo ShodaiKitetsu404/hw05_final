@@ -1,7 +1,6 @@
-from django.http import Http404
 from django.contrib.auth import get_user_model
 from django.test import TestCase, Client
-from ..models import Post, Group, Comment, Follow
+from ..models import Post, Group, Follow
 from django.urls import reverse
 from django import forms
 from django.core.cache import cache

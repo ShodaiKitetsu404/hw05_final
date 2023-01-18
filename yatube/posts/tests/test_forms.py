@@ -179,7 +179,6 @@ class PostCreateFormTest(TestCase):
 
     def test_not_authorized_used_can_not_comment(self):
         old_count_comments = Comment.objects.count()
-        
         form_data = {
             'text': 'test_text'
         }
@@ -193,4 +192,3 @@ class PostCreateFormTest(TestCase):
         )
         self.assertEqual(Comment.objects.count(), old_count_comments + 1)
         self.assertEqual(Comment.objects.filter(**form_data).exists(), True)
-        
