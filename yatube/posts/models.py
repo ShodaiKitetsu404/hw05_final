@@ -13,7 +13,9 @@ class Post(DateTimeModel):
     image = models.ImageField(
         verbose_name='Картинка',
         upload_to='posts/',
-        blank=True
+        help_text='Картинка поста',
+        blank=True,
+        null=True
     )
     author = models.ForeignKey(
         User,
@@ -31,12 +33,12 @@ class Post(DateTimeModel):
         help_text='Группа, к которой будет относиться пост'
     )
 
-    def __str__(self) -> str:
-        return self.text[:15]
-
     class Meta():
         ordering = ['-created']
         verbose_name = 'Пост'
+
+    def __str__(self) -> str:
+        return self.text[:15]
 
 
 class Group(models.Model):
@@ -79,10 +81,3 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following'
     )
-
-    def follow_can_be_created(user, author):
-        following_exists = Follow.objects.filter(
-            author=author,
-            user=user
-        ).exists()
-        return (user != author and not following_exists)

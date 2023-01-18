@@ -1,6 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Custom CSRF check error{% endblock %}
-{% block body_data %}
-  <h1>Custom CSRF check error. 403</h1>
-{% endblock %}
 
+{% block subtitle %}Ошибка 403{% endblock %}
+{% block meta %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+    <h2>Вашему браузеру не удалось создать защищённые файлы куки или получить к ним доступ.</h2>
+    <p>Возврат на <a href="/">главную страницу</a></p>
+{% endblock %}

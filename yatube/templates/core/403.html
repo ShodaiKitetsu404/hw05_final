@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-{% block title %}Custom 403{% endblock %}
-{% block body_data %}
-    <h1>Custom 403</h1>
+
+{% block subtitle %}Ошибка 403{% endblock %}
+{% block meta %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+    <h2>Нет доступа к странице</h2>
+    <p>Возврат на <a href="/">главную страницу</a></p>
 {% endblock %}

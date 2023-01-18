@@ -1,5 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Custom 500{% endblock %}
-{% block body_data %}
-    <h1>Custom 500</h1>
-{% endblock body_data %}
+
+{% block subtitle %}Ошибка на стороне сервера{% endblock %}
+{% block meta %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+    <h2>Извините, но что-то случилось с сайтом.</h2>
+    <p>В техническую поддержку уже отправлено уведомление</p>
+    <p>Возврат на <a href="/">главную страницу</a></p>
+{% endblock %}

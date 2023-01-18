@@ -7,52 +7,47 @@ from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
+POST_COUNT = 10
+
+
+def get_page_obj(posts, request):
+    paginator = Paginator(posts, POST_COUNT)
+    page_number = request.GET.get('page')
+    return {'page_obj': paginator.get_page(page_number)}
+
 
 def index(request):
     template = 'posts/index.html'
-    title = 'Последние обновления на сайте'
-    posts = Post.objects.all()
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    posts = Post.objects.select_related('author', 'group')
     context = {
-        'title': title,
-        'page_obj': page_obj
-    }
+        'page_obj': get_page_obj(posts, request)
+    } 
     return render(request, template, context)
 
 
 def group_posts(request, slug):
     template = 'posts/group_list.html'
     group = get_object_or_404(Group, slug=slug)
-    posts = group.posts.select_related('group').all()
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
+    posts = group.posts.select_related('group')
     context = {
         'group': group,
-        'page_obj': page_obj
+        'page_obj': get_page_obj(posts, request)
     }
     return render(request, template, context)
 
 
-def profile(request, username, following=False):
+def profile(request, username):
     author = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(author=author)
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    number_of_posts = posts.count()
+    posts = author.posts.select_related('author', 'group')
     if request.user.is_authenticated:
-        following = Follow.objects.filter(
-            author=author,
-            user=request.user
-        ).exists()
+        following = (
+            request.user.is_authenticated
+            and request.user != author
+            and request.user.follower.filter(author=author).exists()
+    )
     context = {
         'author': author,
-        'username': username,
-        'number_of_posts': number_of_posts,
-        'page_obj': page_obj,
+        'page_obj': get_page_obj(posts, request),
         'following': following
     }
     return render(request, 'posts/profile.html', context)
@@ -60,14 +55,10 @@ def profile(request, username, following=False):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    title = str(post.text)[:30]
-    number_of_posts = Post.objects.filter(author=post.author).count()
-    form = CommentForm()
-    comments = Comment.objects.filter(post=post)
+    form = CommentForm(request.POST or None)
+    comments = post.comments.select_related('post')
     context = {
         'post': post,
-        'title': title,
-        'number_of_posts': number_of_posts,
         'form': form,
         'comments': comments
     }
@@ -75,23 +66,24 @@ def post_detail(request, post_id):
 
 
 @login_required
-def post_create(request, is_edit=False):
+def post_create(request):
     form = PostForm(
         request.POST or None,
         files=request.FILES or None,
     )
     context = {
         'form': form,
-        'is_edit': is_edit
+        'is_edit': True
     }
     if form.is_valid():
-        data = form.save(commit=False)
-        data.author = request.user
-        data.save()
+        post = form.save(commit=False)
+        post.author = request.user
+        post.save()
         return redirect('posts:profile', request.user)
     return render(request, 'posts/create_post.html', context)
 
 
+@login_required
 def post_edit(request, post_id):
     is_edit = True
     post = get_object_or_404(Post, pk=post_id)
@@ -129,14 +121,9 @@ def add_comment(request, post_id):
 @login_required
 def follow_index(request):
     template = 'posts/follow.html'
-    title = 'Все посты ваших подписок'
     posts = Post.objects.filter(author__following__user=request.user)
-    paginator = Paginator(posts, 10)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
     context = {
-        'title': title,
-        'page_obj': page_obj
+        'page_obj': get_page_obj(posts, request)
     }
     return render(request, template, context)
 
@@ -155,5 +142,7 @@ def profile_follow(request, username):
 @login_required
 def profile_unfollow(request, username):
     author = get_object_or_404(User, username=username)
-    Follow.objects.get(user=request.user, author=author).delete()
-    return redirect('posts:profile', username)
+    if request.user != author:
+        Follow.objects.filter(author=author, user=request.user).delete()
+        return redirect('posts:profile', username=username)
+    return redirect('posts:profile', username=username)

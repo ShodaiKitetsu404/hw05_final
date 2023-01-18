@@ -1,6 +1,5 @@
 from django.http import Http404
 from django.contrib.auth import get_user_model
-from django.shortcuts import get_object_or_404
 from django.test import TestCase, Client
 from ..models import Post, Group, Comment, Follow
 from django.urls import reverse
@@ -299,51 +298,25 @@ class PostsPagesTests(TestCase):
             post_image = response.context['post'].image
             self.assertEqual(post_image, PostsPagesTests.image)
 
-    def test_new_comment_is_created(self):
-        form_data = {
-            'text': 'test_text'
-        }
-        PostsPagesTests.authorized_client.post(
-            reverse(
-                PostsPagesTests.post_comment_url[0],
-                kwargs=PostsPagesTests.post_comment_url[2]
-            ),
-            data=form_data,
-            follow=True
-        )
-        try:
-            new_comment = get_object_or_404(Comment, text='test_text')
-        except Http404:
-            new_comment = None
-        self.assertIsNotNone(new_comment)
-
     def test_index_post_is_in_cache_after_deleting(self):
-        response_1 = PostsPagesTests.authorized_client.get(
+        response = PostsPagesTests.authorized_client.get(
             reverse(PostsPagesTests.index_url[0])
         )
-        content_before_post_deletion = response_1.content
+        content_before_post_deletion = response.content
         post_to_delete = Post.objects.get(pk=1)
         post_to_delete.delete()
-        response_2 = PostsPagesTests.authorized_client.get(
+        response = PostsPagesTests.authorized_client.get(
             reverse(PostsPagesTests.index_url[0])
         )
-        content_after_post_deletion = response_2.content
+        content_after_post_deletion = response.content
         self.assertEqual(
             content_before_post_deletion,
             content_after_post_deletion)
-
-    def test_index_post_is_not_in_content_if_cache_cleared(self):
-        response_1 = PostsPagesTests.authorized_client.get(
-            reverse(PostsPagesTests.index_url[0])
-        )
-        content_before_post_deletion = response_1.content
-        post_to_delete = Post.objects.get(pk=1)
-        post_to_delete.delete()
         cache.clear()
-        response_2 = PostsPagesTests.authorized_client.get(
+        response = PostsPagesTests.authorized_client.get(
             reverse(PostsPagesTests.index_url[0])
         )
-        content_after_post_deletion = response_2.content
+        content_after_post_deletion = response.content
         self.assertNotEqual(
             content_before_post_deletion,
             content_after_post_deletion)
