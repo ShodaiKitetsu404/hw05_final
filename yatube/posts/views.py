@@ -44,7 +44,7 @@ def profile(request, username):
             request.user.is_authenticated
             and request.user != author
             and request.user.follower.filter(author=author).exists()
-            )
+        )
     context = {
         'author': author,
         'page_obj': get_page_obj(posts, request),
