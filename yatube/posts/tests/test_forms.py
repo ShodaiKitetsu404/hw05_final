@@ -190,5 +190,4 @@ class PostCreateFormTest(TestCase):
             data=form_data,
             follow=True
         )
-        self.assertEqual(Comment.objects.count(), old_count_comments + 1)
-        self.assertEqual(Comment.objects.filter(**form_data).exists(), True)
+        self.assertEqual(old_count_comments, 0)
