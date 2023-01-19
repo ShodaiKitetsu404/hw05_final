@@ -153,8 +153,7 @@ class PostCreateFormTest(TestCase):
         }
         PostCreateFormTest.authorized_client.post(
             reverse('posts:create'),
-            data=form_data,
-            follow=True
+            data=form_data
         )
         self.assertTrue(Post.objects.filter(
             text='post_with_image',
