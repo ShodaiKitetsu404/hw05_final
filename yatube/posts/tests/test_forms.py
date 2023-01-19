@@ -56,8 +56,7 @@ class PostCreateFormTest(TestCase):
         }
         response = PostCreateFormTest.authorized_client.post(
             reverse('posts:create'),
-            data=form_data,
-            follow=True
+            data=form_data
         )
         all_pk_with_new_post = set([post.id for post in Post.objects.all()])
         new_posts_pks = all_pk_with_new_post.difference(
