@@ -106,7 +106,7 @@ class PostCreateFormTest(TestCase):
         )
         self.assertRedirects(
             response,
-            f'auth/login/?next=/posts/{post_id}/edit/'
+            f'/auth/login/?next=/posts/{post_id}/edit/'
         )
         try:
             new_post = get_object_or_404(Post, text='new_text')
