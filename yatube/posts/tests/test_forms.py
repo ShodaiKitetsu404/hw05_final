@@ -101,9 +101,10 @@ class PostCreateFormTest(TestCase):
         }
         PostCreateFormTest.guest_client.post(
             reverse('posts:post_edit', kwargs={'post_id': post_id}),
-            data=form_data
+            data=form_data,
+            follow=True
         )
-        self.assertRedirects(response, f'/posts/{post_id}/')
+        self.assertRedirects(response, f'auth/login/?next=/posts/{post_id}/')
         try:
             new_post = get_object_or_404(Post, text='new_text')
         except Http404:
