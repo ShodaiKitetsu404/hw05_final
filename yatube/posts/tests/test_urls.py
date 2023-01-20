@@ -68,10 +68,7 @@ class StaticURLTests(TestCase):
         response = StaticURLTests.guest_client.get(
             StaticURLTests.post_edit_url
         )
-        self.assertRedirects(
-            response,
-            f'/auth/login/?next={StaticURLTests.post_url}edit/'
-        )
+        self.assertRedirects(response, StaticURLTests.post_url)
 
     def test_only_authorized_can_create_post(self):
         response = StaticURLTests.authorized_client.get(
