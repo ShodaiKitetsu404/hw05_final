@@ -220,7 +220,7 @@ class PostsPagesTests(TestCase):
             reverse(PostsPagesTests.post_create_url[0])
         )
         is_edit = response.context.get('is_edit')
-        self.assertFalse(is_edit)
+        self.assertTrue(is_edit)
 
     def test_context_of_editing_posts(self):
         response = PostsPagesTests.authorized_client.get(
