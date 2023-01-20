@@ -161,11 +161,9 @@ class PostsPagesTests(TestCase):
                     )
         )
         first_object = response.context['page_obj'][0]
-        number_of_posts = PostsPagesTests.number_of_created_posts
         context_field = {
             PostsPagesTests.user: first_object.author,
             'test_user': response.context['username'],
-            number_of_posts: response.context['number_of_posts'],
             'foo': first_object.text,
             'smt': first_object.group.title
         }
