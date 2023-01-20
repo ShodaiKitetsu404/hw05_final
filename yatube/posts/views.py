@@ -1,6 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Post, Group, User, Comment, Follow
+from .models import Post, Group, User, Follow
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
