@@ -28,7 +28,7 @@ class TestGroupPaginatorView:
             'Проверьте, что переменная `paginator` на странице `/group/<slug>/` типа `Paginator`'
         )
 
-    def test_index_paginator_not_in_view_context(self, client, few_posts_with_group):
+    def test__paginator_not_in_view_context(self, client, few_posts_with_group):
         response = client.get('/')
         assert isinstance(response.context['page_obj'].paginator, Paginator), (
             'Проверьте, что переменная `paginator` объекта `page_obj` на странице `/` типа `Paginator`'

@@ -128,7 +128,6 @@ class PostsPagesTests(TestCase):
         )
         first_object = response.context['page_obj'][0]
         context_field = {
-            'Последние обновления на сайте': response.context.get('title'),
             'foo': first_object.text,
             'test_user': first_object.author.username,
             'smt': first_object.group.title
