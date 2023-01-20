@@ -179,7 +179,6 @@ class PostsPagesTests(TestCase):
                     kwargs={'post_id': PostsPagesTests.post_id}
                     )
         )
-        post_title = PostsPagesTests.post.text[:30]
         number_of_posts = PostsPagesTests.number_of_created_posts
         context_field = {
             PostsPagesTests.post: response.context['post'],
