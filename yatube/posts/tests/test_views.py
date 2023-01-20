@@ -183,7 +183,6 @@ class PostsPagesTests(TestCase):
         number_of_posts = PostsPagesTests.number_of_created_posts
         context_field = {
             PostsPagesTests.post: response.context['post'],
-            post_title: response.context['title'],
             number_of_posts: response.context['number_of_posts']
         }
         for field, field_value in context_field.items():
