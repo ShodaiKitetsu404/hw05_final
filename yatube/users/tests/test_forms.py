@@ -18,8 +18,7 @@ class UserFormTest(TestCase):
         }
         self.guest_client.post(
             reverse('users:signup'),
-            data=form_data,
-            follow=True
+            data=form_data
         )
         new_user = User.objects.get(username='Svyatoslav')
         self.assertEqual(new_user.username, 'Svyatoslav')
