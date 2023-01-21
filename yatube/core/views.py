@@ -18,7 +18,7 @@ def page_not_found(request, exception):
     )
 
 
-def permission_denied(request, reason=""):
+def permission_denied(request, exception=""):
     return render(
         request,
         template_name="core/403.html",

@@ -13,7 +13,7 @@ POST_COUNT = 10
 def get_page_obj(posts, request):
     paginator = Paginator(posts, POST_COUNT)
     page_number = request.GET.get('page')
-    return {'page_obj': paginator.get_page(page_number)}
+    return paginator.get_page(page_number)
 
 
 def index(request):

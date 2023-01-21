@@ -33,7 +33,7 @@ class Post(DateTimeModel):
         help_text='Группа, к которой будет относиться пост'
     )
 
-    class Meta():
+    class Meta:
         ordering = ['-created']
         verbose_name = 'Пост'
 
