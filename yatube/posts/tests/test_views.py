@@ -239,7 +239,7 @@ class PostsPagesTests(TestCase):
                 response = PostsPagesTests.authorized_client.get(
                     reverse(address, kwargs=args) + '?page=2'
                 )
-                self.assertEqual(len(response), 3)
+                self.assertEqual(len(response.context), 3)
 
     def test_are_post_with_group_exists_in_appropriate_pages(self):
         for address, _, args in PostsPagesTests.paginator_url:
